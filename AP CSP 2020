@@ -1,0 +1,70 @@
+var creditAvailable = [];
+
+onEvent("button1", "click", function( ) {
+  setScreen("screen2");
+  // calling parent function/algorithm
+  main();
+});
+
+onEvent("button2", "click", function( ) {
+  setScreen("screen3");
+});
+
+onEvent("button3", "click", function( ) {
+  setScreen("screen2");
+});
+
+onEvent("buttonhome", "click", function( ) {
+setScreen("screen1");
+});
+
+onEvent("button5", "click", function( ) {
+  setScreen("screen3");
+  hideElement("image0");
+  hideElement("image1");
+  hideElement("image2");
+  hideElement("image3");
+  hideElement("label5");
+});
+
+//parent function
+function main() {
+  // calling child function 1
+  availableCredit();
+  
+  onEvent("button4", "click", function( ) {
+    var priceOfItem = getNumber("text_input1");
+    if (priceOfItem <= 0 || isNaN(priceOfItem)) {
+      setText("text_input1", "Enter a price greater than $0");
+    } else {
+    // calling child function 2 
+    setScreen("screen4");
+    checkCards(priceOfItem);
+  }
+ });
+}
+
+// child function/algorithm 1
+function availableCredit() {
+  for (var i = 0; i < 4; i++) {
+    var randAmount = randomNumber(500,10000);
+    appendItem(creditAvailable, randAmount);
+    setText("label"+i, "$" + randAmount);
+  }
+  console.log(creditAvailable);
+}
+
+
+// child function/algorithm 2
+function checkCards(p) {
+  var cardsThatWork = 0;
+  for (var i = 0; i < 4; i++) {
+    if (creditAvailable[i]-p > 0) {
+      showElement("image"+i);
+      cardsThatWork = cardsThatWork +1;
+    } else if (i==3 && cardsThatWork ==0) {
+      showElement("label5");
+      setText("label5", "No cards can be used for this purchase.");
+    }
+  }
+}
